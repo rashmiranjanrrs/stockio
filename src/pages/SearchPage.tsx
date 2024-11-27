@@ -8,6 +8,7 @@ import StockCardDetail from "../components/StockCardDetail";
 import SkeletonCard from "../components/SkeletonCard";
 import ReactPaginate from "react-paginate";
 import StockChart from "../components/StockChart";
+import listingStatuses from "../listing_statuses.json";
 
 const SearchPage = () => {
   const [stockData, setStockData] = useState<StockData[]>([]);
@@ -65,7 +66,7 @@ const SearchPage = () => {
   };
   return (
     <div id="search" className="container mx-auto px-6 py-12">
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearch} jsonData={listingStatuses} />
       {error && <p className="text-red-500">{error}</p>}
 
       {loading && (
