@@ -7,11 +7,13 @@ import { StockData } from "../types";
 import StockCardDetail from "../components/StockCardDetail";
 import SkeletonCard from "../components/SkeletonCard";
 import ReactPaginate from "react-paginate";
+import StockChart from "../components/StockChart";
 
 const SearchPage = () => {
   const [stockData, setStockData] = useState<StockData[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [view, setView] = useState<"card" | "chart">("card"); // New state for view
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -79,30 +81,62 @@ const SearchPage = () => {
           <h2 className="text-2xl font-semibold mb-6 text-white">
             Stock Data for {stockData[0].symbol}
           </h2>
-          <div className="flex flex-col space-y-6">
-            {currentItems.map((stock) => (
-              <StockCardDetail key={stock.id} stock={stock} />
-            ))}
+          <div className="mb-6">
+            <nav className="flex">
+              <button
+                className={`px-4 py-2 mr-2 font-semibold rounded-t ${
+                  view === "card"
+                    ? "bg-white text-indigo-600"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+                onClick={() => setView("card")}
+              >
+                Card View
+              </button>
+              <button
+                className={`px-4 py-2 font-semibold rounded-t ${
+                  view === "chart"
+                    ? "bg-white text-indigo-600"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+                onClick={() => setView("chart")}
+              >
+                Chart View
+              </button>
+            </nav>
           </div>
-          {pageCount > 1 && (
-            <div className="flex justify-center mt-8 px-[20px]">
-              <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={3}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination flex flex-wrap justify-center"}
-                activeClassName={"active"}
-                pageClassName={"mx-1 px-3 py-1 border rounded"}
-                previousClassName={"mx-1 px-3 py-1 border rounded"}
-                nextClassName={"mx-1 px-3 py-1 border rounded"}
-                disabledClassName={"opacity-50 cursor-not-allowed"}
-                activeLinkClassName={"text-white"}
-              />
-            </div>
+          {view === "card" ? (
+            <>
+              <div className="flex flex-col space-y-6">
+                {currentItems.map((stock) => (
+                  <StockCardDetail key={stock.id} stock={stock} />
+                ))}
+              </div>
+              {pageCount > 1 && (
+                <div className="flex justify-center mt-8 px-[20px]">
+                  <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    breakLabel={"..."}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={3}
+                    onPageChange={handlePageClick}
+                    containerClassName={
+                      "pagination flex flex-wrap justify-center"
+                    }
+                    activeClassName={"active"}
+                    pageClassName={"mx-1 px-3 py-1 border rounded"}
+                    previousClassName={"mx-1 px-3 py-1 border rounded"}
+                    nextClassName={"mx-1 px-3 py-1 border rounded"}
+                    disabledClassName={"opacity-50 cursor-not-allowed"}
+                    activeLinkClassName={"text-white"}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <StockChart stockData={stockData} />
           )}
         </>
       )}
