@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface SearchBarProps {
   onSearch: (symbol: string) => void;
@@ -12,6 +12,22 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, jsonData }) => {
     { symbol: string; name: string }[]
   >([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false); // Controls dropdown visibility
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Handle clicks outside the form to close the dropdown
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        setIsDropdownVisible(false); // Close dropdown when clicking outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   // Filter suggestions based on the search term
   useEffect(() => {
@@ -53,7 +69,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, jsonData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-8 relative">
+    <form onSubmit={handleSubmit} className="mb-8 relative" ref={formRef}>
       <div className="flex items-center">
         <input
           type="text"

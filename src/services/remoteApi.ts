@@ -3,9 +3,9 @@ import resultData from "../featured.json";
 import { StockData } from "../types";
 import { ResultData, GlobalQuote } from "../types/resultData";
 
-const API_KEY = process.env.ALPHA_VANTAGE_API_KEY || "BL50YS2U03AOSGNX";
+const API_KEY = process.env.ALPHA_VANTAGE_API_KEY || "C83C4QKKD8NLTIHL";
 const SEARCH_API_KEY =
-  process.env.SEARCH_ALPHA_VANTAGE_API_KEY || "TJMODGE0AXAEXLT2"; //for limit exceeded
+  process.env.SEARCH_ALPHA_VANTAGE_API_KEY || "F1VRNBCJ5LYSOQTJ"; //for limit exceeded
 const BASE_URL = "https://www.alphavantage.co/query";
 
 export const getGlobalQuote = async (symbol: string) => {
